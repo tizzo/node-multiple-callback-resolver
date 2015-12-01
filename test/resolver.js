@@ -41,7 +41,7 @@ describe('multiple callback resolver', function() {
     callbacks[1](null, {bar: 'baz'});
   });
   it('should allow a conifgurable timeout and should error if that timeout is reached', function(done) {
-    var callbacks = resolver(2, {timeoutMicroseconds: 2}, function(error, data) {
+    var callbacks = resolver(2, {timeoutMilliSeconds: 2}, function(error, data) {
       done();
     });
     callbacks.pop()();

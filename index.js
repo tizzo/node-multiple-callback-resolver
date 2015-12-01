@@ -7,7 +7,7 @@ class Resolver {
    *
    * @param {integer} callbackNumber - The number of callbacks to produce and require.
    * @param {object} options - An optional object with settings.
-   * @param {object} options.timeoutMicroseconds - An optional timeout to set.
+   * @param {object} options.timeoutMilliSeconds - An optional timeout to set.
    * @param {function} done - The callback to call once all
    * @return {Array} - An array of functions to be bound to callbacks.
    */
@@ -32,7 +32,7 @@ class Resolver {
     this.callbacks = [];
     this.results = [];
     this.calledCallbacks = 0;
-    this.timeoutMicroseconds = options.timeoutMicroseconds || 3000;
+    this.timeoutMilliSeconds = options.timeoutMilliSeconds || false;
   }
 
   createCallbacks(callbackNumber, done) {
@@ -40,9 +40,11 @@ class Resolver {
     for (var i = 0; i < callbackNumber; i++) {
       this.callbacks.push(this.createCallback(done));
     }
-    this.timeout = setTimeout(function() {
-      done(new Error('Timeout exceeded waiting for callback to be called.'));
-    }, this.timeoutMicroseconds);
+    if (this.timeoutMilliSeconds) {
+      this.timeout = setTimeout(function() {
+        done(new Error('Timeout exceeded waiting for callback to be called.'));
+      }, this.timeoutMilliSeconds);
+    }
     return this.callbacks;
   }
 
