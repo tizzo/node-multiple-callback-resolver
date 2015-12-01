@@ -1,69 +1,89 @@
 'use strict';
 
-/**
- * Create an array of callbacks and call done only once all have been resolved.
- *
- * @param {integer} callbackNumber - The number of callbacks to produce and require.
- * @param {object} options - An optional object with settings.
- * @param {object} options.timeoutMicroseconds - An optional timeout to set.
- * @param {function} done - The callback to call once all
- * @return {Array} - An array of functions to be bound to callbacks.
- */
-function resolver(callbackNumber, options, done) {
-  var timeout;
-  var timeoutMicroseconds;
-  var callbacks = [];
-  var results = [];
-  var calledCallbacks = 0;
-  if (typeof options == 'function') {
-    done = options;
-    options = {};
+class Resolver {
+
+  /**
+   * Create an array of callbacks and call done only once all have been resolved.
+   *
+   * @param {integer} callbackNumber - The number of callbacks to produce and require.
+   * @param {object} options - An optional object with settings.
+   * @param {object} options.timeoutMicroseconds - An optional timeout to set.
+   * @param {function} done - The callback to call once all
+   * @return {Array} - An array of functions to be bound to callbacks.
+   */
+  static resolver(callbackNumber, options, done) {
+    if (typeof options === 'function') {
+      done = options;
+      options = {};
+    }
+    var resolver = new Resolver(options);
+    return resolver.createCallbacks(callbackNumber, done);
   }
-  timeoutMicroseconds = options.timeoutMicroseconds || 3000;
-  timeout = setTimeout(function() {
-    done(new Error('Timeout exceeded waiting for callback to be called.'));
-  }, timeoutMicroseconds);
-  function createCallback() {
+
+  /**
+   * Create an array of callbacks and call done only once all have been resolved.
+   *
+   * @param {integer} callbackNumber - The number of callbacks to produce and require.
+   * @param {function} done - The callback to call once all
+   * @return {Array} - An array of functions to be bound to callbacks.
+   */
+  constructor(options) {
+    options = options || {};
+    this.callbacks = [];
+    this.results = [];
+    this.calledCallbacks = 0;
+    this.timeoutMicroseconds = options.timeoutMicroseconds || 3000;
+  }
+
+  createCallbacks(callbackNumber, done) {
+    this.callbackNumber = callbackNumber;
+    for (var i = 0; i < callbackNumber; i++) {
+      this.callbacks.push(this.createCallback(done));
+    }
+    this.timeout = setTimeout(function() {
+      done(new Error('Timeout exceeded waiting for callback to be called.'));
+    }, this.timeoutMicroseconds);
+    return this.callbacks;
+  }
+
+  createCallback(done) {
+    var self = this;
     return function() {
       var error = null;
-      results.push(arguments);
-      calledCallbacks++;
-      if (calledCallbacks === callbackNumber) {
-        if (hasErrors(results)) {
+      self.results.push(arguments);
+      self.calledCallbacks++;
+      if (self.calledCallbacks === self.callbackNumber) {
+        if (self.hasErrors(self.results)) {
           error = new Error('Errors occurred');
-          error.errors = getErrors(results);
+          error.errors = self.getErrors(self.results);
         }
-        clearTimeout(timeout);
-        done(error, results);
+        clearTimeout(self.timeout);
+        done(error, self.results);
       }
     };
   }
-  for (var i = 0; i < callbackNumber; i++) {
-    callbacks.push(createCallback());
+
+  hasErrors(results) {
+    return this.getErrors(results).length;
   }
-  return callbacks;
-}
 
-function hasErrors(results) {
-  return getErrors(results).length;
-}
-
-function getErrors(results) {
-  var errors = [];
-  for (let index in results) {
-    if (results.hasOwnProperty(index)) {
-      let result = results[index];
-      if (result[0]) {
-        var error = {
-          callback: index,
-          error: result[0],
-        };
-        errors.push(error);
+  getErrors(results) {
+    var errors = [];
+    for (let index in results) {
+      if (results.hasOwnProperty(index)) {
+        let result = results[index];
+        if (result[0]) {
+          var error = {
+            callback: index,
+            error: result[0],
+          };
+          errors.push(error);
+        }
       }
     }
+    return errors;
   }
-  return errors;
+
 }
 
-
-module.exports = resolver;
+module.exports = Resolver;

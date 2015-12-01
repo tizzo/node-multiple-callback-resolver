@@ -1,7 +1,8 @@
 'use strict';
 
 var should = require('should');
-var resolver = require('..');
+var Resolver = require('..');
+var resolver = Resolver.resolver;
 
 describe('multiple callback resolver', function() {
   it('should generate the configured number of callbacks and call the provided callback once all have completed', function(done) {
