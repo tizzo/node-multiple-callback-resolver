@@ -28,6 +28,14 @@ describe('multiple callback resolver', function() {
     callbacks[0](new Error('Something went wrong.'));
     callbacks[1]();
   });
+  it('should not exit with an error if the callbacks are generated in nonError mode', function(done) {
+    var callbacks = resolver(2, {nonError: true}, function(error, results) {
+      should.not.exist(error);
+      done();
+    });
+    callbacks[0](new Error('Something went wrong.'));
+    callbacks[1]();
+  });
   it('should return the data provided and errors that occurred for any callbacks that completed', function(done) {
     var callbacks = resolver(2, function(error, results) {
       results[0][1].foo.should.equal('bar');

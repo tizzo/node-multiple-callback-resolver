@@ -8,6 +8,7 @@ class Resolver {
    * @param {integer} callbackNumber - The number of callbacks to produce and require.
    * @param {object} options - An optional object with settings.
    * @param {object} options.timeoutMilliSeconds - An optional timeout to set.
+   * @param {object} options.nonError - Do not assume that the first parameter is an error.
    * @param {function} done - The callback to call once all
    * @return {Array} - An array of functions to be bound to callbacks.
    */
@@ -23,9 +24,9 @@ class Resolver {
   /**
    * Create an array of callbacks and call done only once all have been resolved.
    *
-   * @param {integer} callbackNumber - The number of callbacks to produce and require.
-   * @param {function} done - The callback to call once all
-   * @return {Array} - An array of functions to be bound to callbacks.
+   * @param {object} options - An optional object with settings.
+   * @param {object} options.timeoutMilliSeconds - An optional timeout to set.
+   * @param {object} options.nonError - Do not assume that the first parameter is an error.
    */
   constructor(options) {
     options = options || {};
@@ -33,6 +34,7 @@ class Resolver {
     this.results = [];
     this.calledCallbacks = 0;
     this.timeoutMilliSeconds = options.timeoutMilliSeconds || false;
+    this.nonError = options.nonError || false;
   }
 
   createCallbacks(callbackNumber, done) {
@@ -55,7 +57,7 @@ class Resolver {
       self.results.push(arguments);
       self.calledCallbacks++;
       if (self.calledCallbacks === self.callbackNumber) {
-        if (self.hasErrors(self.results)) {
+        if (!self.nonError && self.hasErrors(self.results)) {
           error = new Error('Errors occurred');
           error.errors = self.getErrors(self.results);
         }
