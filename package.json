@@ -1,0 +1,29 @@
+{
+  "name": "multiple-callback-spy",
+  "version": "1.0.0",
+  "description": "Provides a function for generating callback functions and calls a provide callback once all callbacks have completed or an error after a configurable timeout.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
+    "standards": "./node_modules/.bin/eslint index.js test",
+    "watch": "./node_modules/.bin/mocha -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tizzo/node-multiple-callback-spy.git"
+  },
+  "author": "Howard Tyson <howard@howardtyson.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tizzo/node-multiple-callback-runner/issues"
+  },
+  "homepage": "https://github.com/tizzo/node-multiple-callback-runner#readme",
+  "devDependencies": {
+    "coveralls": "^2.11.4",
+    "eslint": "^1.10.2",
+    "istanbul": "^0.4.1",
+    "mocha": "^2.3.4",
+    "should": "^7.1.1"
+  }
+}
