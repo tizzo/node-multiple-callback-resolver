@@ -1,6 +1,6 @@
 # Multiple Callback Resolver
-[![Build Status](https://travis-ci.org/tizzo/node-multiple-callback-spy.svg?branch=master)](https://travis-ci.org/tizzo/node-multiple-callback-spy)
-[![Coverage Status](https://coveralls.io/repos/tizzo/node-multiple-callback-spy/badge.svg?branch=master&service=github)](https://coveralls.io/github/tizzo/node-multiple-callback-spy?branch=master)
+[![Build Status](https://travis-ci.org/tizzo/node-multiple-callback-resolver.svg?branch=master)](https://travis-ci.org/tizzo/node-multiple-callback-resolver)
+[![Coverage Status](https://coveralls.io/repos/tizzo/node-multiple-callback-resolver/badge.svg?branch=master&service=github)](https://coveralls.io/github/tizzo/node-multiple-callback-resolver?branch=master)
 
 This project contains a simple class that allows you to instantiate callback functions
 and then execute a final callback when all of the generated callbacks complete. This
