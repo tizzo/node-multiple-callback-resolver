@@ -1,5 +1,5 @@
 {
-  "name": "multiple-callback-spy",
+  "name": "multiple-callback-resolver",
   "version": "1.0.0",
   "description": "Provides a function for generating callback functions and calls a provide callback once all callbacks have completed or an error after a configurable timeout.",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/tizzo/node-multiple-callback-spy.git"
+    "url": "git+ssh://git@github.com/tizzo/node-multiple-callback-resolver.git"
   },
   "author": "Howard Tyson <howard@howardtyson.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tizzo/node-multiple-callback-runner/issues"
+    "url": "https://github.com/tizzo/node-multiple-callback-resolver/issues"
   },
-  "homepage": "https://github.com/tizzo/node-multiple-callback-runner#readme",
+  "homepage": "https://github.com/tizzo/node-multiple-callback-resolver#readme",
   "devDependencies": {
     "coveralls": "^2.11.4",
     "eslint": "^1.10.2",
