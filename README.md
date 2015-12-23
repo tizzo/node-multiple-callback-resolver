@@ -13,19 +13,22 @@ when the `run()` method is processed.
 
 ```` javascript
 var Resolver = require('multiple-callback-resolver');
-var callbacks = Resolver.resolve(3, function(error, results) {
+var resolver = new Resolver();
+resolver.resolve(function(error, results) {
   // Get the data sent on the 'start' event.
   results[0];
   // Get the data sent on the 'in progress' event.
   results[1];
   // Get the data sent on the 'end' event.
   results[2];
+  // Data sent to the callback provided to the `run()` method.
+  results[3];
 };
 var something = new Something();
-something.on('start', callbacks[0]);
-something.on('in progress', callbacks[1]);
-something.on('end', callbacks[2]);
-something.start();
+something.on('start', resolver.createCallback());
+something.on('in progress', resolver.createCallback());
+something.on('end', resolver.createCallback());
+something.run(resolver.createCallback());
 ````
 
 *Optionally, you may set a timeout:*

@@ -1,6 +1,6 @@
 {
   "name": "multiple-callback-resolver",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Provides a function for generating callback functions and calls a provide callback once all callbacks have completed or an error after a configurable timeout.",
   "main": "index.js",
   "scripts": {
