@@ -35,7 +35,7 @@ Optionally, you may set a timeout:
 
 ```` javascript
 var Resolver = require('multiple-callback-resolver');
-var callbacks = Resolver.resolve(2, {timeoutMilliSeconds: 10}  function(error, results) {
+var callbacks = Resolver.resolve(2, {timeoutMilliSeconds: 10}, function(error, results) {
   console.log(error);
   // `[ 'Timeout exceeded waiting for callback to be called.' ]`
 };
