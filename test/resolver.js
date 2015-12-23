@@ -15,7 +15,7 @@ describe('multiple callback resolver', function() {
   it('should work with just one function.', function(done) {
     var callbacks = resolver(1, done);
     callbacks.length.should.equal(1);
-    callbacks.pop()();
+    callbacks[0]();
   });
   it('should exit with an error if any of the callbacks sent an error', function(done) {
     var callbacks = resolver(2, function(error, results) {
@@ -53,5 +53,13 @@ describe('multiple callback resolver', function() {
       done();
     });
     callbacks.pop()();
+  });
+  it('should allow the callbacks to be created individually and the reolve callback to be specified separately', function(done) {
+    var resolver = new Resolver();
+    var one = resolver.createCallback();
+    var two = resolver.createCallback();
+    resolver.resolve(done);
+    one();
+    two();
   });
 });

@@ -32,39 +32,49 @@ class Resolver {
     options = options || {};
     this.callbacks = [];
     this.results = [];
-    this.calledCallbacks = 0;
     this.timeoutMilliSeconds = options.timeoutMilliSeconds || false;
     this.nonError = options.nonError || false;
+    this.resolveFunction = null;
+  }
+
+  resolve(done) {
+    this.resolveFunction = done;
   }
 
   createCallbacks(callbackNumber, done) {
-    this.callbackNumber = callbackNumber;
+    this.resolve(done);
     for (var i = 0; i < callbackNumber; i++) {
-      this.callbacks.push(this.createCallback(done));
+      this.createCallback();
     }
-    if (this.timeoutMilliSeconds) {
-      this.timeout = setTimeout(function() {
-        done(new Error('Timeout exceeded waiting for callback to be called.'));
-      }, this.timeoutMilliSeconds);
-    }
+    this.startTimer();
     return this.callbacks;
   }
 
-  createCallback(done) {
+  startTimer() {
     var self = this;
-    return function() {
+    if (this.timeoutMilliSeconds) {
+      this.timeout = setTimeout(function() {
+        self.resolveFunction(new Error('Timeout exceeded waiting for callback to be called.'));
+      }, this.timeoutMilliSeconds);
+    }
+  }
+
+  createCallback() {
+    var self = this;
+    var callback = function() {
       var error = null;
       self.results.push(arguments);
-      self.calledCallbacks++;
-      if (self.calledCallbacks === self.callbackNumber) {
+      if (self.results.length === self.callbacks.length) {
         if (!self.nonError && self.hasErrors(self.results)) {
           error = new Error('Errors occurred');
           error.errors = self.getErrors(self.results);
         }
         clearTimeout(self.timeout);
-        done(error, self.results);
+        self.resolveFunction(error, self.results);
       }
     };
+    self.callbacks.push(callback);
+    return callback;
   }
 
   hasErrors(results) {
