@@ -52,7 +52,6 @@ describe('multiple callback resolver', function() {
     var callbacks = resolver(2, {timeoutMilliSeconds: 2}, function(error, data) {
       done();
     });
-    callbacks.pop()();
   });
   it('should allow the callbacks to be created individually and the reolve callback to be specified separately', function(done) {
     var resolver = new Resolver();
