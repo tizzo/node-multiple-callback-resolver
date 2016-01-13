@@ -25,9 +25,9 @@ resolver.resolve(function(error, results) {
   results[3];
 };
 var something = new Something();
-something.on('start', resolver.createCallback());
-something.on('in progress', resolver.createCallback());
-something.on('end', resolver.createCallback());
+something.once('start', resolver.createCallback());
+something.once('in progress', resolver.createCallback());
+something.once('end', resolver.createCallback());
 something.run(resolver.createCallback());
 ````
 

@@ -61,4 +61,21 @@ describe('multiple callback resolver', function() {
     one();
     two();
   });
+  it('should gracefully handle calling a callback more than once', function(done) {
+    var resolver = new Resolver();
+    var one = resolver.createCallback();
+    var two = resolver.createCallback();
+    resolver.resolve(function(error) {
+      should.not.exist(error);
+    });
+    one();
+    two();
+    try {
+      two();
+    }
+    catch (error) {
+      should.exist(error);
+      done();
+    }
+  });
 });

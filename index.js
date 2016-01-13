@@ -72,6 +72,9 @@ class Resolver {
         clearTimeout(self.timeout);
         self.resolveFunction(error, self.results);
       }
+      else if (self.results.length > self.callbacks.length) {
+        throw new Error('Callback called more than once.');
+      }
     };
     self.callbacks.push(callback);
     return callback;
