@@ -78,4 +78,21 @@ describe('multiple callback resolver', function() {
       done();
     }
   });
+  it('should correlate specified callback restult keys to values', function(done) {
+    //var resolver = new Resolver({nonError: true});
+    var resolver = new Resolver();
+    var one = resolver.createCallback('one')
+    var two = resolver.createCallback('two')
+    var three = resolver.createCallback('three')
+    var four = resolver.createCallback('four')
+    resolver.resolve(function(error, results) {
+      should.exist(error);
+      results.two['0'].message.should.equal('Two is an error');
+      done();
+    });
+    four();
+    one();
+    three();
+    two(new Error('Two is an error'));
+  });
 });

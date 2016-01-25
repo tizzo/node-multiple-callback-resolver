@@ -31,7 +31,7 @@ class Resolver {
   constructor(options) {
     options = options || {};
     this.callbacks = [];
-    this.results = [];
+    this.results = {};
     this.timeoutMilliSeconds = options.timeoutMilliSeconds || false;
     this.nonError = options.nonError || false;
     this.resolveFunction = null;
@@ -59,21 +59,24 @@ class Resolver {
     }
   }
 
-  createCallback() {
+  createCallback(resultKey) {
     var self = this;
+    resultKey = resultKey || this.callbacks.length;
+    var called = false;
     var callback = function() {
+      if (called) {
+        throw new Error('Callback ' + resultKey + ' called more than once.');
+      }
+      called = true;
       var error = null;
-      self.results.push(arguments);
-      if (self.results.length === self.callbacks.length) {
+      self.results[resultKey] = arguments;
+      if (Object.keys(self.results).length === self.callbacks.length) {
         if (!self.nonError && self.hasErrors(self.results)) {
           error = new Error('Errors occurred');
           error.errors = self.getErrors(self.results);
         }
         clearTimeout(self.timeout);
         self.resolveFunction(error, self.results);
-      }
-      else if (self.results.length > self.callbacks.length) {
-        throw new Error('Callback called more than once.');
       }
     };
     self.callbacks.push(callback);
